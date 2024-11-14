@@ -9,11 +9,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -22,6 +22,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -29,9 +32,10 @@ import com.example.effectivemobile.presentation.config.bottomMenuRoutes
 import com.example.effectivemobile.presentation.navigation.NavigationGraph
 import com.example.effectivemobile.presentation.navigation.Screen
 import com.example.effectivemobile.ui.theme.Background
-import com.example.effectivemobile.ui.theme.LightGrey
 import com.example.effectivemobile.ui.theme.EffectiveMobileTheme
 import com.example.effectivemobile.ui.theme.Green
+import com.example.effectivemobile.ui.theme.LightGrey
+import com.example.effectivemobile.ui.theme.Roboto
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -59,16 +63,19 @@ class MainActivity : ComponentActivity() {
                     val bottomBarItems = listOf(
                         BottomNavigationItem(
                             route = Screen.HomeScreen.route,
+                            name =  stringResource(id = R.string.home),
                             painter = painterResource(id = R.drawable.house),
                             tint = LightGrey
                         ),
                         BottomNavigationItem(
                             route = Screen.FavoritesScreen.route,
+                            name = stringResource(id = R.string.favorites),
                             painter = painterResource(id = R.drawable.bookmark),
                             tint = LightGrey
                         ),
                         BottomNavigationItem(
                             route = Screen.ProfileScreen.route,
+                            name = stringResource(id = R.string.account),
                             painter = painterResource(id = R.drawable.person),
                             tint = LightGrey
                         )
@@ -96,6 +103,15 @@ class MainActivity : ComponentActivity() {
                                                         tint = if (bottomNavigationItem.route == currentRoute) Green else LightGrey,
                                                         contentDescription = null
                                                     )
+                                                },
+                                                label = {
+                                                    Text(
+                                                        text = bottomNavigationItem.name,
+                                                        fontFamily = Roboto,
+                                                        fontSize = 12.sp,
+                                                        fontWeight = FontWeight.W600,
+                                                        color = if (bottomNavigationItem.route == currentRoute) Green else LightGrey
+                                                    )
                                                 }
                                             )
                                         }
@@ -117,6 +133,7 @@ class MainActivity : ComponentActivity() {
 
 data class BottomNavigationItem(
     val route: String,
+    val name: String,
     val painter: Painter,
     val tint: Color
 )

@@ -14,4 +14,7 @@
     <string name="entrance">Вход</string>
     <string name="user_uncreated">Нет аккаунта? </string>
     <string name="forgot_password">Забыли пароль</string>
+    
+    <string name="home">Главная</string>
+    <string name="account">Аккаунт</string>
 </resources>
