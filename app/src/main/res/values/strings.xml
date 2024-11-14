@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">EffectiveMobile</string>
+
+    <string name="favorites">Избранное</string>
+    <string name="profile">Профиль</string>
+
+    <string name="registration">Регистрация</string>
+    <string name="password_empty">Введите пароль</string>
+    <string name="email">Email</string>
+    <string name="password">Пароль</string>
+    <string name="confirm_password">Повторить пароль</string>
+    <string name="user_created">Уже есть аккаунт? </string>
+    <string name="login">Войти</string>
+    <string name="entrance">Вход</string>
+    <string name="user_uncreated">Нет аккаунта? </string>
+    <string name="forgot_password">Забыли пароль</string>
+</resources>
