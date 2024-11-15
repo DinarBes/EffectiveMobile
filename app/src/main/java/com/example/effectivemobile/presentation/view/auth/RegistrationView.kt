@@ -1,5 +1,6 @@
 package com.example.effectivemobile.presentation.view.auth
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -29,20 +30,26 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.data.storage.model.AuthState
 import com.example.effectivemobile.R
 import com.example.effectivemobile.presentation.items.FormView
 import com.example.effectivemobile.presentation.items.PasswordView
 import com.example.effectivemobile.presentation.navigation.Screen
+import com.example.effectivemobile.presentation.viewmodel.AuthViewModel
 import com.example.effectivemobile.ui.theme.Blue
 import com.example.effectivemobile.ui.theme.Green
 import com.example.effectivemobile.ui.theme.Grey
 import com.example.effectivemobile.ui.theme.LightGrey
 import com.example.effectivemobile.ui.theme.Orange
 import com.example.effectivemobile.ui.theme.Roboto
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Composable
 fun RegistrationView(
-    navController: NavController
+    navController: NavController,
+    authViewModel: AuthViewModel
 ) {
 
     val context = LocalContext.current
@@ -65,7 +72,9 @@ fun RegistrationView(
             fontSize = 28.sp,
             fontWeight = FontWeight.W400,
             color = LightGrey,
-            modifier = Modifier.fillMaxWidth().align(Alignment.Start)
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.Start)
         )
         RegistrationInfo(
             email = email,
@@ -90,7 +99,20 @@ fun RegistrationView(
                     enabled.value = true
                 } else {
                     enabled.value = true
-
+                    CoroutineScope(Dispatchers.IO).launch {
+                        authViewModel.authState.collect { authState ->
+                            when (authState) {
+                                is AuthState.Success -> authViewModel.registrationUser(
+                                    login = email.value,
+                                    password = password.value
+                                )
+                                is AuthState.Error -> {
+                                    Log.e("Error", authState.message ?: "Unknown error")
+                                    Toast.makeText(context, authState.message ?: "Unknown error", Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                        }
+                    }
                 }
             }
         ) {

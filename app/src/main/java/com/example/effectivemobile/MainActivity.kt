@@ -26,11 +26,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.effectivemobile.presentation.config.bottomMenuRoutes
 import com.example.effectivemobile.presentation.navigation.NavigationGraph
 import com.example.effectivemobile.presentation.navigation.Screen
+import com.example.effectivemobile.presentation.viewmodel.AuthViewModel
 import com.example.effectivemobile.ui.theme.Background
 import com.example.effectivemobile.ui.theme.EffectiveMobileTheme
 import com.example.effectivemobile.ui.theme.Green
@@ -53,6 +55,7 @@ class MainActivity : ComponentActivity() {
             EffectiveMobileTheme {
 
                 val navController = rememberNavController()
+                val authViewModel = hiltViewModel<AuthViewModel>()
 
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -122,7 +125,10 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.fillMaxSize()
                     ) {
                         Box(modifier = Modifier.padding(it)) {
-                            NavigationGraph(navHostController = navController)
+                            NavigationGraph(
+                                navHostController = navController,
+                                authViewModel = authViewModel
+                            )
                         }
                     }
                 }

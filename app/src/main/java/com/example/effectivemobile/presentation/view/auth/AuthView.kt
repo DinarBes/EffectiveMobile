@@ -1,5 +1,7 @@
 package com.example.effectivemobile.presentation.view.auth
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -18,25 +20,33 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.data.storage.model.AuthState
 import com.example.effectivemobile.R
 import com.example.effectivemobile.presentation.items.FormView
 import com.example.effectivemobile.presentation.items.PasswordView
 import com.example.effectivemobile.presentation.navigation.Screen
+import com.example.effectivemobile.presentation.viewmodel.AuthViewModel
 import com.example.effectivemobile.ui.theme.Green
 import com.example.effectivemobile.ui.theme.Grey
 import com.example.effectivemobile.ui.theme.LightGrey
 import com.example.effectivemobile.ui.theme.Roboto
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Composable
 fun AuthView(
-    navController: NavController
+    navController: NavController,
+    authViewModel: AuthViewModel
 ) {
 
+    val context = LocalContext.current
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
     val enabled = remember { mutableStateOf(true) }
@@ -69,7 +79,27 @@ fun AuthView(
             shape = RoundedCornerShape(30.dp),
             enabled = enabled.value,
             onClick = {
-
+                if (email.value.isEmpty() || password.value.isEmpty()) {
+                    enabled.value = false
+                    Toast.makeText(context, "Заполните все поля", Toast.LENGTH_SHORT).show()
+                    enabled.value = true
+                } else {
+                    enabled.value = true
+                    CoroutineScope(Dispatchers.IO).launch {
+                        authViewModel.authState.collect { authState ->
+                            when (authState) {
+                                is AuthState.Success -> authViewModel.authUser(
+                                    login = email.value,
+                                    password = password.value
+                                )
+                                is AuthState.Error -> {
+                                    Log.e("Error", authState.message ?: "Unknown error")
+                                    Toast.makeText(context, authState.message ?: "Unknown error", Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                        }
+                    }
+                }
             }
         ) {
             Text(

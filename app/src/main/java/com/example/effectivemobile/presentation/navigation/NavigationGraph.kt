@@ -9,10 +9,12 @@ import com.example.effectivemobile.presentation.view.HomeView
 import com.example.effectivemobile.presentation.view.ProfileView
 import com.example.effectivemobile.presentation.view.auth.AuthView
 import com.example.effectivemobile.presentation.view.auth.RegistrationView
+import com.example.effectivemobile.presentation.viewmodel.AuthViewModel
 
 @Composable
 fun NavigationGraph(
-    navHostController: NavHostController
+    navHostController: NavHostController,
+    authViewModel: AuthViewModel
 ) {
 
     NavHost(
@@ -22,13 +24,15 @@ fun NavigationGraph(
 
         composable(route = Screen.RegistrationScreen.route) {
             RegistrationView(
-                navController = navHostController
+                navController = navHostController,
+                authViewModel = authViewModel
             )
         }
 
         composable(route = Screen.AuthScreen.route) {
             AuthView(
-                navController = navHostController
+                navController = navHostController,
+                authViewModel = authViewModel
             )
         }
 
