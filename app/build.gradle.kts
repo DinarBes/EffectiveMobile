@@ -78,6 +78,11 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.coil.svg)
 
+    // room
+    implementation(libs.androidx.room.ktx)
+    kapt(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.paging)
+
     implementation(project(path = ":data"))
     implementation(project(path = ":domain"))
 }

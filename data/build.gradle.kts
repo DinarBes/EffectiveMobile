@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     id("com.google.gms.google-services")
     id("org.jetbrains.kotlin.plugin.serialization")
+    id("kotlin-kapt")
 }
 
 android {
@@ -58,6 +59,11 @@ dependencies {
     implementation(libs.ktor.serialization.kotlinx.json)
     implementation(libs.ktor.serialization.kotlinx.json.jvm)
     implementation(libs.ktor.client.core)
+
+    // room
+    implementation(libs.androidx.room.ktx)
+    kapt(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.paging)
 
     implementation(project(path = ":domain"))
 }

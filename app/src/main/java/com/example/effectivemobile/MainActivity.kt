@@ -53,11 +53,11 @@ class MainActivity : ComponentActivity() {
 
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
 
-            EffectiveMobileTheme {
+            val navController = rememberNavController()
+            val authViewModel = hiltViewModel<AuthViewModel>()
+            val homeViewModel = hiltViewModel<HomeViewModel>()
 
-                val navController = rememberNavController()
-                val authViewModel = hiltViewModel<AuthViewModel>()
-                val homeViewModel = hiltViewModel<HomeViewModel>()
+            EffectiveMobileTheme {
 
                 Surface(
                     modifier = Modifier.fillMaxSize(),
