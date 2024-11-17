@@ -27,27 +27,46 @@ import com.example.effectivemobile.ui.theme.LightGrey
 import com.example.effectivemobile.ui.theme.Roboto
 
 @Composable
-fun CourseItem() {
+fun CourseItem(
+    image: String,
+    date: String,
+    title: String,
+    summary: String,
+    price: Int?,
+    action: () -> Unit
+) {
 
     Column(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { action() },
         verticalArrangement = Arrangement.spacedBy(15.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        TopSelection()
-        BottomSelection()
+        TopSelection(
+            image = image,
+            date = date
+        )
+        BottomSelection(
+            title = title,
+            summary = summary,
+            price = price
+        )
     }
 }
 
 @Composable
-fun TopSelection() {
+fun TopSelection(
+    image: String,
+    date: String
+) {
 
     Box(modifier = Modifier
         .fillMaxWidth()
         .padding(10.dp)
     ) {
         AsyncImage(
-            model = "",
+            model = image,
             contentDescription = null,
             modifier = Modifier.fillMaxWidth()
         )
@@ -63,7 +82,7 @@ fun TopSelection() {
             )
         }
         Text(
-            text = "",
+            text = date,
             fontFamily = Roboto,
             fontSize = 12.sp,
             fontWeight = FontWeight.W400,
@@ -77,7 +96,11 @@ fun TopSelection() {
 }
 
 @Composable
-fun BottomSelection() {
+fun BottomSelection(
+    title: String,
+    summary: String,
+    price: Int?
+) {
 
     Column(
         modifier = Modifier
@@ -85,17 +108,19 @@ fun BottomSelection() {
             .padding(10.dp)
     ) {
         Text(
-            text = "Java-developer",
+            text = title,
             fontFamily = Roboto,
             fontSize = 16.sp,
             fontWeight = FontWeight.Medium,
             color = LightGrey
         )
         Text(
-            text = "Text text text",
+            text = summary,
             fontFamily = Roboto,
             fontSize = 12.sp,
             fontWeight = FontWeight.W400,
+            maxLines = 2,
+            softWrap = true,
             color = LightGrey.copy(0.7f)
         )
         Row(
@@ -104,7 +129,7 @@ fun BottomSelection() {
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = "999 Р",
+                text = price.toString() + " ₽",
                 fontFamily = Roboto,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Medium,

@@ -10,11 +10,13 @@ import com.example.effectivemobile.presentation.view.ProfileView
 import com.example.effectivemobile.presentation.view.auth.AuthView
 import com.example.effectivemobile.presentation.view.auth.RegistrationView
 import com.example.effectivemobile.presentation.viewmodel.AuthViewModel
+import com.example.effectivemobile.presentation.viewmodel.HomeViewModel
 
 @Composable
 fun NavigationGraph(
     navHostController: NavHostController,
-    authViewModel: AuthViewModel
+    authViewModel: AuthViewModel,
+    homeViewModel: HomeViewModel
 ) {
 
     NavHost(
@@ -37,7 +39,9 @@ fun NavigationGraph(
         }
 
         composable(route = Screen.HomeScreen.route) {
-            HomeView()
+            HomeView(
+                homeViewModel = homeViewModel
+            )
         }
 
         composable(route = Screen.FavoritesScreen.route) {

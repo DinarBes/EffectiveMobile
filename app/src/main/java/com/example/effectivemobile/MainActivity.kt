@@ -33,6 +33,7 @@ import com.example.effectivemobile.presentation.config.bottomMenuRoutes
 import com.example.effectivemobile.presentation.navigation.NavigationGraph
 import com.example.effectivemobile.presentation.navigation.Screen
 import com.example.effectivemobile.presentation.viewmodel.AuthViewModel
+import com.example.effectivemobile.presentation.viewmodel.HomeViewModel
 import com.example.effectivemobile.ui.theme.Background
 import com.example.effectivemobile.ui.theme.EffectiveMobileTheme
 import com.example.effectivemobile.ui.theme.Green
@@ -56,6 +57,7 @@ class MainActivity : ComponentActivity() {
 
                 val navController = rememberNavController()
                 val authViewModel = hiltViewModel<AuthViewModel>()
+                val homeViewModel = hiltViewModel<HomeViewModel>()
 
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -127,7 +129,8 @@ class MainActivity : ComponentActivity() {
                         Box(modifier = Modifier.padding(it)) {
                             NavigationGraph(
                                 navHostController = navController,
-                                authViewModel = authViewModel
+                                authViewModel = authViewModel,
+                                homeViewModel = homeViewModel
                             )
                         }
                     }

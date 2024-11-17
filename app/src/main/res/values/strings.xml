@@ -17,4 +17,8 @@
     
     <string name="home">Главная</string>
     <string name="account">Аккаунт</string>
+
+    <string name="start_course">Начать курс</string>
+    <string name="go_to_platform">Перейти на платформу</string>
+    <string name="course_info">О курсе</string>
 </resources>
