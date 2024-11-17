@@ -74,6 +74,10 @@ dependencies {
     kapt(libs.hilt.android.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
 
+    // coil
+    implementation(libs.coil.compose)
+    implementation(libs.coil.svg)
+
     implementation(project(path = ":data"))
     implementation(project(path = ":domain"))
 }
