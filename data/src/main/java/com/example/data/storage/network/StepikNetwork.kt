@@ -36,7 +36,7 @@ class StepikNetwork {
         }
 
         suspend fun getCourses(
-            page: Int = 2
+            page: Int
         ): CourseModel {
 
             val response = client.get("https://stepik.org/api/courses") {

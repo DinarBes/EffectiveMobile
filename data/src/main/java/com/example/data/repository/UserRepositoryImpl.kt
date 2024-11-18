@@ -18,9 +18,9 @@ class UserRepositoryImpl: UserRepository {
         FirebaseNetwork.auth(login, password)
     }
 
-    override suspend fun getCourses(): List<Course> {
+    override suspend fun getCourses(page: Int): List<Course> {
 
-        val courseModel = StepikNetwork.getCourses()
+        val courseModel = StepikNetwork.getCourses(page = page)
 
         return coroutineScope {
             courseModel.courses.map {
@@ -34,7 +34,8 @@ class UserRepositoryImpl: UserRepository {
                         lessonsCount = it.lessonsCount,
                         price = it.price,
                         title = it.title,
-                        createDate = it.createDate
+                        createDate = it.createDate,
+                        page = courseModel.meta.page
                     )
                 }
             }.awaitAll()

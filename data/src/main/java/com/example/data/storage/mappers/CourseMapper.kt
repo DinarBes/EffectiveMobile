@@ -3,7 +3,7 @@ package com.example.data.storage.mappers
 import com.example.data.storage.local.CourseEntity
 import com.example.domain.models.Course
 
-fun Course.toNewsEntity(): CourseEntity {
+fun Course.toCourseEntity(): CourseEntity {
     return CourseEntity(
         id = id,
         summary = summary,
@@ -13,7 +13,8 @@ fun Course.toNewsEntity(): CourseEntity {
         lessonsCount = lessonsCount,
         price = price,
         title = title,
-        createDate = createDate
+        createDate = createDate,
+        page = page
     )
 }
 
@@ -27,6 +28,7 @@ fun CourseEntity.toCourse(): Course {
         lessonsCount = lessonsCount,
         price = price,
         title = title,
-        createDate = createDate
+        createDate = createDate,
+        page = page
     )
 }

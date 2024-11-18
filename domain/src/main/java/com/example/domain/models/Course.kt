@@ -16,5 +16,6 @@ data class Course(
     val price: Int? = null,
     val title: String,
     @SerialName("create_date")
-    val createDate: String
+    val createDate: String,
+    val page: Int
 )

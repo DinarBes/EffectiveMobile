@@ -5,7 +5,7 @@ import com.example.domain.repository.UserRepository
 
 class GetCoursesUseCase(private val userRepository: UserRepository) {
 
-    suspend fun getCourses(): List<Course> {
-        return userRepository.getCourses()
+    suspend fun getCourses(page: Int): List<Course> {
+        return userRepository.getCourses(page = page)
     }
 }

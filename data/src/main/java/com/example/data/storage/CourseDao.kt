@@ -1,5 +1,6 @@
 package com.example.data.storage
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
@@ -20,6 +21,12 @@ interface CourseDao {
      */
     @Query("SELECT COUNT(*) FROM CourseEntity WHERE id = :id")
     fun findById(id: Int): Boolean
+
+    /**
+     * Метод для пагинации
+     */
+    @Query("SELECT * FROM CourseEntity WHERE page = :page")
+    fun pagingSource(page: Int): PagingSource<Int, CourseEntity>
 
     /**
      * Метод для очистки кэша

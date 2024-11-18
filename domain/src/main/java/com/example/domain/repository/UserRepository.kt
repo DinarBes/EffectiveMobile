@@ -8,5 +8,5 @@ interface UserRepository {
 
     suspend fun authUser(login: String, password: String)
 
-    suspend fun getCourses(): List<Course>
+    suspend fun getCourses(page: Int): List<Course>
 }

@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.example.data.repository.UserRepositoryImpl
 import com.example.data.storage.local.CourseDatabase
+import com.example.data.storage.repository.Repository
 import com.example.domain.repository.UserRepository
 import dagger.Module
 import dagger.Provides
@@ -24,7 +25,7 @@ class DataModule {
 
     @Provides
     @Singleton
-    fun provideNewsDatabase(@ApplicationContext context: Context): CourseDatabase {
+    fun provideCourseDatabase(@ApplicationContext context: Context): CourseDatabase {
         return Room.databaseBuilder(
             context,
             CourseDatabase::class.java,
@@ -32,5 +33,11 @@ class DataModule {
         )
             .allowMainThreadQueries()
             .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideCoursePager(courseDb: CourseDatabase, userRepository: UserRepository): Repository {
+        return Repository(courseDb = courseDb, userRepository = userRepository)
     }
 }
