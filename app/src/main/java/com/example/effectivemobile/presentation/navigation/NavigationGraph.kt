@@ -12,13 +12,15 @@ import com.example.effectivemobile.presentation.view.auth.RegistrationView
 import com.example.effectivemobile.presentation.viewmodel.AuthViewModel
 import com.example.effectivemobile.presentation.viewmodel.BookmarksViewModel
 import com.example.effectivemobile.presentation.viewmodel.HomeViewModel
+import com.example.effectivemobile.presentation.viewmodel.SearchViewModel
 
 @Composable
 fun NavigationGraph(
     navHostController: NavHostController,
     authViewModel: AuthViewModel,
     homeViewModel: HomeViewModel,
-    bookmarksViewModel: BookmarksViewModel
+    bookmarksViewModel: BookmarksViewModel,
+    searchViewModel: SearchViewModel
 ) {
 
     NavHost(

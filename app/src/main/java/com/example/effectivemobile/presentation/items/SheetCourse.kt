@@ -219,7 +219,7 @@ fun SheetCourse(
             modifier = Modifier.padding(horizontal = 16.dp)
         )
         Text(
-            text = htmlFormated(course.description),
+            text = if (course.description.isNotEmpty()) htmlFormated(course.description) else course.summary,
             color = LightGrey.copy(0.7f),
             fontFamily = Roboto,
             fontWeight = FontWeight.W400,

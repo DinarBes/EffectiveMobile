@@ -29,7 +29,7 @@ class HomeViewModel @Inject constructor(
     private val _courses = MutableStateFlow<List<Course>?>(null)
     val courses = _courses.asStateFlow()
 
-    private val _currentPage = MutableStateFlow(3)
+    private val _currentPage = MutableStateFlow(1)
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val coursesFlow = _currentPage.flatMapLatest { page ->

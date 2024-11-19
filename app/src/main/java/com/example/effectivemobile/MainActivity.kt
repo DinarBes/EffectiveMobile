@@ -43,6 +43,7 @@ import com.example.effectivemobile.presentation.navigation.Screen
 import com.example.effectivemobile.presentation.viewmodel.AuthViewModel
 import com.example.effectivemobile.presentation.viewmodel.BookmarksViewModel
 import com.example.effectivemobile.presentation.viewmodel.HomeViewModel
+import com.example.effectivemobile.presentation.viewmodel.SearchViewModel
 import com.example.effectivemobile.ui.theme.Background
 import com.example.effectivemobile.ui.theme.EffectiveMobileTheme
 import com.example.effectivemobile.ui.theme.Green
@@ -68,6 +69,7 @@ class MainActivity : ComponentActivity() {
             val authViewModel: AuthViewModel = hiltViewModel<AuthViewModel>()
             val homeViewModel: HomeViewModel = hiltViewModel<HomeViewModel>()
             val bookmarksViewModel: BookmarksViewModel = hiltViewModel<BookmarksViewModel>()
+            val searchViewModel: SearchViewModel = hiltViewModel<SearchViewModel>()
 
             EffectiveMobileTheme {
 
@@ -159,7 +161,8 @@ class MainActivity : ComponentActivity() {
                                 navHostController = navController,
                                 authViewModel = authViewModel,
                                 homeViewModel = homeViewModel,
-                                bookmarksViewModel = bookmarksViewModel
+                                bookmarksViewModel = bookmarksViewModel,
+                                searchViewModel = searchViewModel
                             )
                         }
                     }

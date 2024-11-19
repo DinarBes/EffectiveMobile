@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.effectivemobile.presentation.items.CourseItem
+import com.example.effectivemobile.presentation.items.SearchBar
 import com.example.effectivemobile.presentation.items.SheetCourse
 import com.example.effectivemobile.presentation.viewmodel.BookmarksViewModel
 import com.example.effectivemobile.presentation.viewmodel.HomeViewModel
@@ -97,6 +98,9 @@ fun HomeView(
                     verticalArrangement = Arrangement.spacedBy(15.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+                    item {
+                        SearchBar()
+                    }
                     items(count = courses.itemCount) { index ->
                         val item = courses[index]
                         item?.let {
