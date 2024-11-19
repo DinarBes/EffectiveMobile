@@ -30,7 +30,7 @@ class HomeViewModel @Inject constructor(
     private val _courses = MutableStateFlow<List<Course>?>(null)
     val courses = _courses.asStateFlow()
 
-    private val _currentPage = MutableStateFlow(0)
+    private val _currentPage = MutableStateFlow(2)
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val coursesFlow = _currentPage.flatMapLatest { page ->
@@ -44,7 +44,7 @@ class HomeViewModel @Inject constructor(
 //    fun getCourses() {
 //        viewModelScope.launch {
 //            try {
-//                _courses.value = getCoursesUseCase.getCourses()
+//                _courses.value = getCoursesUseCase.getCourses(1)
 //            } catch (error: Exception) {
 //                Log.e("Get course vm error", error.toString())
 //            }

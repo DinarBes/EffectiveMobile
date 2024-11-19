@@ -5,25 +5,30 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -33,64 +38,99 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.domain.models.Course
 import com.example.effectivemobile.R
+import com.example.effectivemobile.presentation.extension.dateToString
+import com.example.effectivemobile.presentation.extension.htmlFormated
 import com.example.effectivemobile.ui.theme.Background
 import com.example.effectivemobile.ui.theme.ButtonGrey
+import com.example.effectivemobile.ui.theme.DarkGrey
 import com.example.effectivemobile.ui.theme.Green
 import com.example.effectivemobile.ui.theme.LightGrey
 import com.example.effectivemobile.ui.theme.Roboto
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SheetCourse(
-    modalBottomSheetState: SheetState,
+    modalBottomSheetState: ModalBottomSheetState,
     course: Course
 ) {
-
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
 
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Background)
+            .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(15.dp),
         horizontalAlignment = Alignment.Start
     ) {
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
+            modifier = Modifier.fillMaxWidth()
         ) {
             AsyncImage(
                 model = course.cover,
                 contentDescription = null,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop
             )
-            IconButton(onClick = { /*TODO*/ }) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = null,
-                    tint = Background,
-                    modifier = Modifier
-                        .background(
-                            color = LightGrey,
-                            shape = CircleShape
-                        )
-                        .size(40.dp)
-                        .align(Alignment.TopStart)
-                )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 15.dp)
+                    .padding(horizontal = 5.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                IconButton(
+                    onClick = {
+                        scope.launch {
+                            modalBottomSheetState.hide()
+                        }
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = null,
+                        tint = Background,
+                        modifier = Modifier
+                            .background(
+                                color = LightGrey,
+                                shape = CircleShape
+                            )
+                            .padding(5.dp)
+                            .size(40.dp)
+                    )
+                }
+                IconButton(onClick = { /*TODO*/ }) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.bookmark),
+                        contentDescription = null,
+                        tint = Background,
+                        modifier = Modifier
+                            .background(
+                                color = LightGrey,
+                                shape = CircleShape
+                            )
+                            .padding(5.dp)
+                            .size(40.dp)
+                    )
+                }
             }
-            IconButton(onClick = { /*TODO*/ }) {
-                Icon(
-                    painter = painterResource(id = R.drawable.bookmark),
-                    contentDescription = null,
-                    tint = Background,
+            Box(
+                modifier = Modifier
+                    .padding(10.dp)
+                    .clip(CircleShape)
+                    .background(color = DarkGrey.copy(0.5f))
+                    .align(Alignment.BottomStart)
+            ) {
+                Text(
+                    text = course.createDate.dateToString("yyyy-MM-dd'T'HH:mm:ss", "dd MMMM yyyy"),
+                    fontFamily = Roboto,
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.W400,
+                    color = LightGrey,
                     modifier = Modifier
-                        .background(
-                            color = LightGrey,
-                            shape = CircleShape
-                        )
-                        .size(40.dp)
-                        .align(Alignment.TopEnd)
+                        .padding(5.dp)
                 )
             }
         }
@@ -99,12 +139,14 @@ fun SheetCourse(
             fontFamily = Roboto,
             fontSize = 16.sp,
             fontWeight = FontWeight.Medium,
-            color = LightGrey
+            color = LightGrey,
+            modifier = Modifier.padding(horizontal = 16.dp)
         )
         Button(
             modifier = Modifier
                 .fillMaxWidth()
-                .align(Alignment.End),
+                .align(Alignment.End)
+                .padding(horizontal = 16.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Green),
             shape = RoundedCornerShape(30.dp),
             onClick = {
@@ -125,7 +167,8 @@ fun SheetCourse(
         Button(
             modifier = Modifier
                 .fillMaxWidth()
-                .align(Alignment.End),
+                .align(Alignment.End)
+                .padding(horizontal = 16.dp),
             colors = ButtonDefaults.buttonColors(containerColor = ButtonGrey),
             shape = RoundedCornerShape(30.dp),
             onClick = {
@@ -148,14 +191,16 @@ fun SheetCourse(
             color = LightGrey,
             fontFamily = Roboto,
             fontWeight = FontWeight.W400,
-            fontSize = 22.sp
+            fontSize = 22.sp,
+            modifier = Modifier.padding(horizontal = 16.dp)
         )
         Text(
-            text = stringResource(id = R.string.go_to_platform),
+            text = htmlFormated(course.description),
             color = LightGrey.copy(0.7f),
             fontFamily = Roboto,
             fontWeight = FontWeight.W400,
-            fontSize = 14.sp
+            fontSize = 14.sp,
+            modifier = Modifier.padding(horizontal = 16.dp)
         )
     }
 }

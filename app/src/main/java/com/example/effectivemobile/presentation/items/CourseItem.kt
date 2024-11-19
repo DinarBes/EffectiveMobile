@@ -6,9 +6,15 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -16,15 +22,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.effectivemobile.R
+import com.example.effectivemobile.presentation.extension.dateToString
+import com.example.effectivemobile.ui.theme.Background
+import com.example.effectivemobile.ui.theme.ButtonGrey
+import com.example.effectivemobile.ui.theme.DarkGrey
 import com.example.effectivemobile.ui.theme.Green
 import com.example.effectivemobile.ui.theme.LightGrey
 import com.example.effectivemobile.ui.theme.Roboto
+import kotlinx.coroutines.launch
 
 @Composable
 fun CourseItem(
@@ -39,6 +52,10 @@ fun CourseItem(
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            .background(
+                color = ButtonGrey,
+                shape = RoundedCornerShape(16.dp)
+            )
             .clickable { action() },
         verticalArrangement = Arrangement.spacedBy(15.dp),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -50,7 +67,8 @@ fun CourseItem(
         BottomSelection(
             title = title,
             summary = summary,
-            price = price
+            price = price,
+            action = action
         )
     }
 }
@@ -61,37 +79,55 @@ fun TopSelection(
     date: String
 ) {
 
-    Box(modifier = Modifier
-        .fillMaxWidth()
-        .padding(10.dp)
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
     ) {
         AsyncImage(
             model = image,
             contentDescription = null,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth().height(120.dp),
+            contentScale = ContentScale.FillWidth
         )
-        IconButton(onClick = { /*TODO*/ }) {
-            Icon(
-                painter = painterResource(id = R.drawable.bookmark),
-                contentDescription = null,
-                tint = LightGrey,
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 15.dp)
+                .padding(horizontal = 5.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.End
+        ) {
+            IconButton(onClick = { /*TODO*/ }) {
+                Icon(
+                    painter = painterResource(id = R.drawable.bookmark),
+                    contentDescription = null,
+                    tint = LightGrey,
+                    modifier = Modifier
+                        .clip(CircleShape)
+                        .background(color = DarkGrey.copy(0.5f))
+                        .padding(5.dp)
+                        .size(20.dp)
+                )
+            }
+        }
+        Box(
+            modifier = Modifier
+                .padding(10.dp)
+                .clip(CircleShape)
+                .background(color = DarkGrey.copy(0.5f))
+                .align(Alignment.BottomStart)
+        ) {
+            Text(
+                text = date.dateToString("yyyy-MM-dd'T'HH:mm:ss", "dd MMMM yyyy"),
+                fontFamily = Roboto,
+                fontSize = 12.sp,
+                fontWeight = FontWeight.W400,
+                color = LightGrey,
                 modifier = Modifier
-                    .clip(CircleShape)
-                    .background(color = LightGrey.copy(0.5f))
-                    .align(Alignment.TopEnd)
+                    .padding(5.dp)
             )
         }
-        Text(
-            text = date,
-            fontFamily = Roboto,
-            fontSize = 12.sp,
-            fontWeight = FontWeight.W400,
-            color = LightGrey,
-            modifier = Modifier
-                .clip(CircleShape)
-                .background(color = LightGrey.copy(0.5f))
-                .align(Alignment.BottomStart)
-        )
     }
 }
 
@@ -99,13 +135,16 @@ fun TopSelection(
 fun BottomSelection(
     title: String,
     summary: String,
-    price: Int?
+    price: Int?,
+    action: () -> Unit
 ) {
 
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(10.dp)
+            .padding(10.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
             text = title,
@@ -129,7 +168,7 @@ fun BottomSelection(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = price.toString() + " ₽",
+                text = if (price != null) "$price ₽" else "Бесплатно",
                 fontFamily = Roboto,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Medium,
@@ -143,7 +182,7 @@ fun BottomSelection(
                 color = Green,
                 modifier = Modifier
                     .clickable {
-
+                        action()
                     }
             )
         }

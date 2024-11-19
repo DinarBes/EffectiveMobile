@@ -27,14 +27,14 @@ class CourseMediator(
         return try {
             // текущий ключ загрузки
             val loadKey = when (loadType) {
-                LoadType.REFRESH -> 1
+                LoadType.REFRESH -> 2
                 LoadType.PREPEND -> return MediatorResult.Success(
                     endOfPaginationReached = true
                 )
                 LoadType.APPEND -> {
                     val lastItem = state.lastItemOrNull()
                     if (lastItem == null) {
-                        1
+                        2
                     }
                     else {
                         (lastItem.key / state.config.pageSize) + 1
@@ -42,7 +42,9 @@ class CourseMediator(
                 }
             }
 
+            Log.e("Loadkey", loadKey.toString())
             val courses = userRepository.getCourses(page = loadKey)
+            Log.e("Mediator", courses.toString())
 
             courseDb.withTransaction {
                 val courseEntities = courses.mapNotNull {

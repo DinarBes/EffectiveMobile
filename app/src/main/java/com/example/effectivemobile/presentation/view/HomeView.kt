@@ -9,12 +9,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ModalBottomSheetLayout
+import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -24,7 +24,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
@@ -32,10 +32,9 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.effectivemobile.presentation.items.CourseItem
 import com.example.effectivemobile.presentation.items.SheetCourse
 import com.example.effectivemobile.presentation.viewmodel.HomeViewModel
-import com.example.effectivemobile.ui.theme.DarkGrey
+import com.example.effectivemobile.ui.theme.Background
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeView(
     homeViewModel: HomeViewModel
@@ -45,7 +44,9 @@ fun HomeView(
 
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
-    val modalBottomSheetState = rememberModalBottomSheetState()
+    val modalBottomSheetState = rememberModalBottomSheetState(
+        initialValue = ModalBottomSheetValue.Hidden
+    )
     val content: @Composable (() -> Unit) = { Text("NULL") }
     var customSheetContent by remember { mutableStateOf(content) }
 
@@ -60,18 +61,26 @@ fun HomeView(
         }
     }
 
-    ModalBottomSheet(
+    ModalBottomSheetLayout(
         sheetState = modalBottomSheetState,
-        onDismissRequest = {
-            scope.launch {
-                modalBottomSheetState.hide()
+        sheetElevation = 8.dp,
+        sheetBackgroundColor = Color.White,
+        sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
+        sheetContent = {
+            Box(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                if (modalBottomSheetState.isVisible) {
+                    customSheetContent()
+                }
             }
-        },
-        modifier = Modifier
-            .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
-            .background(color = DarkGrey)
+        }
     ) {
-        Box(modifier = Modifier.fillMaxSize()) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Background)
+        ) {
             if (courses.loadState.refresh is LoadState.Loading) {
                 CircularProgressIndicator(
                     modifier = Modifier.align(Alignment.Center),
@@ -81,8 +90,9 @@ fun HomeView(
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(16.dp),
-                    verticalArrangement = Arrangement.Top,
+                        .padding(16.dp)
+                        .background(Background),
+                    verticalArrangement = Arrangement.spacedBy(15.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     items(count = courses.itemCount) { index ->
