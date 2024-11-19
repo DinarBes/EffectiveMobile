@@ -23,7 +23,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
@@ -36,10 +40,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.example.data.storage.mappers.toBookmarkEntity
+import com.example.data.storage.mappers.toCourseEntity
 import com.example.domain.models.Course
 import com.example.effectivemobile.R
 import com.example.effectivemobile.presentation.extension.dateToString
 import com.example.effectivemobile.presentation.extension.htmlFormated
+import com.example.effectivemobile.presentation.viewmodel.BookmarksViewModel
 import com.example.effectivemobile.ui.theme.Background
 import com.example.effectivemobile.ui.theme.ButtonGrey
 import com.example.effectivemobile.ui.theme.DarkGrey
@@ -51,10 +58,15 @@ import kotlinx.coroutines.launch
 @Composable
 fun SheetCourse(
     modalBottomSheetState: ModalBottomSheetState,
-    course: Course
+    course: Course,
+    bookmarksViewModel: BookmarksViewModel
 ) {
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
+
+    var checked by remember {
+        mutableStateOf(!bookmarksViewModel.isRowIsExist(course.id))
+    }
 
     Column(
         modifier = Modifier
@@ -101,11 +113,23 @@ fun SheetCourse(
                             .size(40.dp)
                     )
                 }
-                IconButton(onClick = { /*TODO*/ }) {
+                IconButton(
+                    onClick = {
+                        if (checked) {
+                            bookmarksViewModel.upsertBookmarks(course.toBookmarkEntity())
+                            checked = !checked
+                            Toast.makeText(context, "Курс добавлен в избранное", Toast.LENGTH_SHORT).show()
+                        } else {
+                            bookmarksViewModel.deleteBookmarks(course.id)
+                            checked = !checked
+                            Toast.makeText(context, "Курс удален из избранного", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                ) {
                     Icon(
                         painter = painterResource(id = R.drawable.bookmark),
                         contentDescription = null,
-                        tint = Background,
+                        tint = if (checked) Background else Green,
                         modifier = Modifier
                             .background(
                                 color = LightGrey,

@@ -31,13 +31,15 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.effectivemobile.presentation.items.CourseItem
 import com.example.effectivemobile.presentation.items.SheetCourse
+import com.example.effectivemobile.presentation.viewmodel.BookmarksViewModel
 import com.example.effectivemobile.presentation.viewmodel.HomeViewModel
 import com.example.effectivemobile.ui.theme.Background
 import kotlinx.coroutines.launch
 
 @Composable
 fun HomeView(
-    homeViewModel: HomeViewModel
+    homeViewModel: HomeViewModel,
+    bookmarksViewModel: BookmarksViewModel
 ) {
 
     val courses = homeViewModel.coursesFlow.collectAsLazyPagingItems()
@@ -99,16 +101,14 @@ fun HomeView(
                         val item = courses[index]
                         item?.let {
                             CourseItem(
-                                image = it.cover,
-                                date = it.createDate,
-                                title = it.title,
-                                summary = it.summary,
-                                price = it.price
+                                course = it,
+                                bookmarksViewModel = bookmarksViewModel
                             ) {
                                 customSheetContent = {
                                     SheetCourse(
                                         modalBottomSheetState = modalBottomSheetState,
-                                        course = it
+                                        course = it,
+                                        bookmarksViewModel = bookmarksViewModel
                                     )
                                 }
                                 scope.launch {

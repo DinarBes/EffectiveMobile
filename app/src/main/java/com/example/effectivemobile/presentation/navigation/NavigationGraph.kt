@@ -10,13 +10,15 @@ import com.example.effectivemobile.presentation.view.ProfileView
 import com.example.effectivemobile.presentation.view.auth.AuthView
 import com.example.effectivemobile.presentation.view.auth.RegistrationView
 import com.example.effectivemobile.presentation.viewmodel.AuthViewModel
+import com.example.effectivemobile.presentation.viewmodel.BookmarksViewModel
 import com.example.effectivemobile.presentation.viewmodel.HomeViewModel
 
 @Composable
 fun NavigationGraph(
     navHostController: NavHostController,
     authViewModel: AuthViewModel,
-    homeViewModel: HomeViewModel
+    homeViewModel: HomeViewModel,
+    bookmarksViewModel: BookmarksViewModel
 ) {
 
     NavHost(
@@ -40,12 +42,16 @@ fun NavigationGraph(
 
         composable(route = Screen.HomeScreen.route) {
             HomeView(
-                homeViewModel = homeViewModel
+                homeViewModel = homeViewModel,
+                bookmarksViewModel = bookmarksViewModel
             )
         }
 
         composable(route = Screen.FavoritesScreen.route) {
-            FavoritesView()
+            bookmarksViewModel.loadAllBookmarks()
+            FavoritesView(
+                bookmarksViewModel = bookmarksViewModel
+            )
         }
 
         composable(route = Screen.ProfileScreen.route) {

@@ -17,3 +17,14 @@ data class CourseEntity(
     val createDate: String,
     val page: Int
 )
+
+@Entity
+data class BookmarkEntity(
+    @PrimaryKey val id: Int,
+    val summary: String,
+    val cover: String,
+    val description: String,
+    val price: Int? = null,
+    val title: String,
+    val createDate: String
+)

@@ -9,12 +9,16 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SmallTopAppBar
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -32,9 +36,12 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.effectivemobile.app.App
 import com.example.effectivemobile.presentation.config.bottomMenuRoutes
+import com.example.effectivemobile.presentation.config.getLabelForRoute
+import com.example.effectivemobile.presentation.config.topBarRoutes
 import com.example.effectivemobile.presentation.navigation.NavigationGraph
 import com.example.effectivemobile.presentation.navigation.Screen
 import com.example.effectivemobile.presentation.viewmodel.AuthViewModel
+import com.example.effectivemobile.presentation.viewmodel.BookmarksViewModel
 import com.example.effectivemobile.presentation.viewmodel.HomeViewModel
 import com.example.effectivemobile.ui.theme.Background
 import com.example.effectivemobile.ui.theme.EffectiveMobileTheme
@@ -45,6 +52,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @OptIn(ExperimentalMaterial3Api::class)
     @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +67,7 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController()
             val authViewModel: AuthViewModel = hiltViewModel<AuthViewModel>()
             val homeViewModel: HomeViewModel = hiltViewModel<HomeViewModel>()
+            val bookmarksViewModel: BookmarksViewModel = hiltViewModel<BookmarksViewModel>()
 
             EffectiveMobileTheme {
 
@@ -94,6 +103,22 @@ class MainActivity : ComponentActivity() {
                     }
 
                     Scaffold(
+                        topBar = {
+                            topBarRoutes.forEach { topBarRoute ->
+                                if (topBarRoute == currentRoute) {
+                                    TopAppBar(title = {
+                                        Text(
+                                            text = getLabelForRoute(topBarRoute),
+                                            color = LightGrey,
+                                            fontFamily = Roboto,
+                                            fontWeight = FontWeight.W400,
+                                            fontSize = 22.sp
+                                        )
+                                    }
+                                    )
+                                }
+                            }
+                        },
                         bottomBar = {
                             bottomMenuRoutes.forEach { bottomMenuRoute ->
                                 if (bottomMenuRoute == currentRoute) {
@@ -133,7 +158,8 @@ class MainActivity : ComponentActivity() {
                             NavigationGraph(
                                 navHostController = navController,
                                 authViewModel = authViewModel,
-                                homeViewModel = homeViewModel
+                                homeViewModel = homeViewModel,
+                                bookmarksViewModel = bookmarksViewModel
                             )
                         }
                     }

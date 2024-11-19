@@ -4,11 +4,11 @@ import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
+import com.example.data.storage.local.BookmarkEntity
 import com.example.data.storage.local.CourseEntity
 
 @Dao
 interface CourseDao {
-
 
     /**
      * Метод для добавления курса в кэш
@@ -44,23 +44,23 @@ interface CourseDao {
      * Метод для добавления курса в закладки
      */
     @Upsert
-    suspend fun upsertBookmark(courseEntity: CourseEntity)
+    suspend fun upsertBookmark(bookmarkEntity: BookmarkEntity)
 
     /**
      * Метод для загрузки всех закладок
      */
-    @Query("SELECT * FROM CourseEntity")
-    fun loadAllBookmarks(): Array<CourseEntity>
+    @Query("SELECT * FROM BookmarkEntity")
+    fun loadAllBookmarks(): Array<BookmarkEntity>
 
     /**
      * Метод удаления новости из закладок
      */
-    @Query("DELETE FROM CourseEntity WHERE id = :bookmarksId")
+    @Query("DELETE FROM BookmarkEntity WHERE id = :bookmarksId")
     suspend fun deleteBookmarks(bookmarksId: Int)
 
     /**
      * Метод для проверки есть ли новость в закладках
      */
-    @Query("SELECT EXISTS(SELECT * FROM CourseEntity WHERE id = :id)")
+    @Query("SELECT EXISTS(SELECT * FROM BookmarkEntity WHERE id = :id)")
     fun isRowIsExist(id: Int): Boolean
 }

@@ -21,4 +21,6 @@
     <string name="start_course">Начать курс</string>
     <string name="go_to_platform">Перейти на платформу</string>
     <string name="course_info">О курсе</string>
+
+    <string name="favorites_empty">Нет избранных курсов❤️</string>
 </resources>

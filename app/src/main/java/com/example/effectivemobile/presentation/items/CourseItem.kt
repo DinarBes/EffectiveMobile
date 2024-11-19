@@ -1,51 +1,52 @@
 package com.example.effectivemobile.presentation.items
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.example.data.storage.mappers.toBookmarkEntity
+import com.example.data.storage.mappers.toCourseEntity
+import com.example.domain.models.Course
 import com.example.effectivemobile.R
 import com.example.effectivemobile.presentation.extension.dateToString
-import com.example.effectivemobile.ui.theme.Background
+import com.example.effectivemobile.presentation.viewmodel.BookmarksViewModel
 import com.example.effectivemobile.ui.theme.ButtonGrey
 import com.example.effectivemobile.ui.theme.DarkGrey
 import com.example.effectivemobile.ui.theme.Green
 import com.example.effectivemobile.ui.theme.LightGrey
 import com.example.effectivemobile.ui.theme.Roboto
-import kotlinx.coroutines.launch
 
 @Composable
 fun CourseItem(
-    image: String,
-    date: String,
-    title: String,
-    summary: String,
-    price: Int?,
+    course: Course,
+    bookmarksViewModel: BookmarksViewModel,
     action: () -> Unit
 ) {
 
@@ -61,13 +62,13 @@ fun CourseItem(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         TopSelection(
-            image = image,
-            date = date
+            course = course,
+            bookmarksViewModel = bookmarksViewModel
         )
         BottomSelection(
-            title = title,
-            summary = summary,
-            price = price,
+            title = course.title,
+            summary = course.summary,
+            price = course.price,
             action = action
         )
     }
@@ -75,9 +76,14 @@ fun CourseItem(
 
 @Composable
 fun TopSelection(
-    image: String,
-    date: String
+    course: Course,
+    bookmarksViewModel: BookmarksViewModel
 ) {
+
+    val context = LocalContext.current
+    var checked by remember {
+        mutableStateOf(!bookmarksViewModel.isRowIsExist(course.id))
+    }
 
     Box(
         modifier = Modifier
@@ -85,7 +91,7 @@ fun TopSelection(
             .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
     ) {
         AsyncImage(
-            model = image,
+            model = course.cover,
             contentDescription = null,
             modifier = Modifier.fillMaxWidth().height(120.dp),
             contentScale = ContentScale.FillWidth
@@ -93,16 +99,28 @@ fun TopSelection(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 15.dp)
+                .padding(top = 5.dp)
                 .padding(horizontal = 5.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.End
         ) {
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(
+                onClick = {
+                    if (checked) {
+                        bookmarksViewModel.upsertBookmarks(course.toBookmarkEntity())
+                        checked = !checked
+                        Toast.makeText(context, "Курс добавлен в избранное", Toast.LENGTH_SHORT).show()
+                    } else {
+                        bookmarksViewModel.deleteBookmarks(course.id)
+                        checked = !checked
+                        Toast.makeText(context, "Курс удален из избранного", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            ) {
                 Icon(
                     painter = painterResource(id = R.drawable.bookmark),
                     contentDescription = null,
-                    tint = LightGrey,
+                    tint = if (checked) LightGrey else Green,
                     modifier = Modifier
                         .clip(CircleShape)
                         .background(color = DarkGrey.copy(0.5f))
@@ -119,7 +137,7 @@ fun TopSelection(
                 .align(Alignment.BottomStart)
         ) {
             Text(
-                text = date.dateToString("yyyy-MM-dd'T'HH:mm:ss", "dd MMMM yyyy"),
+                text = course.createDate.dateToString("yyyy-MM-dd'T'HH:mm:ss", "dd MMMM yyyy"),
                 fontFamily = Roboto,
                 fontSize = 12.sp,
                 fontWeight = FontWeight.W400,

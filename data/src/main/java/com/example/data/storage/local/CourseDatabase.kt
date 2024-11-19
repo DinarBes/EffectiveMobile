@@ -5,7 +5,7 @@ import androidx.room.RoomDatabase
 import com.example.data.storage.CourseDao
 
 @Database(
-    entities = [CourseEntity::class],
+    entities = [CourseEntity::class, BookmarkEntity::class],
     version = 1
 )
 abstract class CourseDatabase: RoomDatabase() {

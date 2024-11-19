@@ -23,14 +23,13 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val getCoursesUseCase: GetCoursesUseCase,
-//    private val courseDb: CourseDatabase,
     private val repository: Repository
 ): ViewModel() {
 
     private val _courses = MutableStateFlow<List<Course>?>(null)
     val courses = _courses.asStateFlow()
 
-    private val _currentPage = MutableStateFlow(2)
+    private val _currentPage = MutableStateFlow(3)
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val coursesFlow = _currentPage.flatMapLatest { page ->
