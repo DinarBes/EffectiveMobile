@@ -23,7 +23,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val getCoursesUseCase: GetCoursesUseCase,
-    private val courseDb: CourseDatabase,
+//    private val courseDb: CourseDatabase,
     private val repository: Repository
 ): ViewModel() {
 

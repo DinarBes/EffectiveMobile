@@ -8,5 +8,7 @@ interface UserRepository {
 
     suspend fun authUser(login: String, password: String)
 
+    suspend fun subscribeToTopic(vararg topics: String)
+
     suspend fun getCourses(page: Int): List<Course>
 }

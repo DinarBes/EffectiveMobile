@@ -3,6 +3,7 @@ package com.example.effectivemobile.di
 import com.example.domain.repository.UserRepository
 import com.example.domain.usecase.AuthorizationUseCase
 import com.example.domain.usecase.GetCoursesUseCase
+import com.example.domain.usecase.SubscribeToTopicUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,5 +21,10 @@ class DomainModule {
     @Provides
     fun provideGetCoursesUseCase(userRepository: UserRepository): GetCoursesUseCase {
         return GetCoursesUseCase(userRepository = userRepository)
+    }
+
+    @Provides
+    fun subscribeToTopicUseCase(userRepository: UserRepository): SubscribeToTopicUseCase {
+        return SubscribeToTopicUseCase(userRepository = userRepository)
     }
 }

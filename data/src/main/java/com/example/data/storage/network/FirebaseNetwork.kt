@@ -6,53 +6,48 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.ktx.messaging
 import kotlinx.coroutines.tasks.await
 
-class FirebaseNetwork {
+object FirebaseNetwork {
 
-    companion object {
+    suspend fun registration(
+        email: String,
+        password: String,
+    ) {
+        try {
+            FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password).await()
+        } catch (error: Exception) {
+            Log.e("Reg error", error.toString())
+        }
+    }
 
-        private val auth = FirebaseAuth.getInstance()
+    suspend fun auth(
+        email: String,
+        password: String
+    ) {
+        try {
+            FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password).await()
+        } catch (error: Exception) {
+            Log.e("Reg error", error.toString())
+        }
+    }
 
-        suspend fun registration(
-            email: String,
-            password: String,
-        ) {
+    suspend fun subscribeToTopics(vararg topics: String) {
+
+        for (topic in topics) {
             try {
-                auth.createUserWithEmailAndPassword(email, password).await()
+                Firebase.messaging.subscribeToTopic(topic).await()
             } catch (error: Exception) {
-                Log.e("Reg error", error.toString())
+                Log.e("Subcribe to topic error", "$topic: $error")
             }
         }
+    }
 
-        suspend fun auth(
-            email: String,
-            password: String
-        ) {
+    suspend fun unsubscribeToTopics(vararg topics: String) {
+
+        for (topic in topics) {
             try {
-                auth.signInWithEmailAndPassword(email, password).await()
+                Firebase.messaging.unsubscribeFromTopic(topic).await()
             } catch (error: Exception) {
-                Log.e("Reg error", error.toString())
-            }
-        }
-
-        suspend fun subscribeToTopics(vararg topics: String) {
-
-            for (topic in topics) {
-                try {
-                    Firebase.messaging.subscribeToTopic(topic).await()
-                } catch (error: Exception) {
-                    Log.e("Subcribe to topic error", "$topic: $error")
-                }
-            }
-        }
-
-        suspend fun unsubscribeToTopics(vararg topics: String) {
-
-            for (topic in topics) {
-                try {
-                    Firebase.messaging.unsubscribeFromTopic(topic).await()
-                } catch (error: Exception) {
-                    Log.e("Unsubcribe to topic error", "$topic: $error")
-                }
+                Log.e("Unsubcribe to topic error", "$topic: $error")
             }
         }
     }

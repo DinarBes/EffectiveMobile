@@ -18,6 +18,10 @@ class UserRepositoryImpl: UserRepository {
         FirebaseNetwork.auth(login, password)
     }
 
+    override suspend fun subscribeToTopic(vararg topics: String) {
+        FirebaseNetwork.subscribeToTopics(topics.toString())
+    }
+
     override suspend fun getCourses(page: Int): List<Course> {
 
         val courseModel = StepikNetwork.getCourses(page = page)

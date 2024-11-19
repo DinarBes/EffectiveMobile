@@ -6,24 +6,28 @@ import androidx.lifecycle.viewModelScope
 import com.example.data.storage.model.AuthState
 import com.example.data.storage.network.FirebaseNetwork
 import com.example.domain.usecase.AuthorizationUseCase
+import com.example.domain.usecase.SubscribeToTopicUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    private val authorizationUseCase: AuthorizationUseCase
+    private val authorizationUseCase: AuthorizationUseCase,
+    private val subscribeToTopicUseCase: SubscribeToTopicUseCase
 ): ViewModel() {
 
-    private val _authState = MutableSharedFlow<AuthState>()
-    val authState = _authState.asSharedFlow()
+    private val _authState = MutableStateFlow<AuthState>(AuthState.Success)
+    val authState = _authState.asStateFlow()
 
     init {
         viewModelScope.launch {
             try {
-                FirebaseNetwork.subscribeToTopics("")
+                subscribeToTopicUseCase.subscribeToTopic("")
             } catch (error: Exception) {
                 Log.e("Subscribe to topic vm error", error.toString())
             }

@@ -1,5 +1,6 @@
 package com.example.effectivemobile
 
+import android.annotation.SuppressLint
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -29,6 +30,7 @@ import androidx.core.view.WindowCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.effectivemobile.app.App
 import com.example.effectivemobile.presentation.config.bottomMenuRoutes
 import com.example.effectivemobile.presentation.navigation.NavigationGraph
 import com.example.effectivemobile.presentation.navigation.Screen
@@ -43,6 +45,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -51,11 +54,11 @@ class MainActivity : ComponentActivity() {
 
         setContent {
 
-            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
             val navController = rememberNavController()
-            val authViewModel = hiltViewModel<AuthViewModel>()
-            val homeViewModel = hiltViewModel<HomeViewModel>()
+            val authViewModel: AuthViewModel = hiltViewModel<AuthViewModel>()
+            val homeViewModel: HomeViewModel = hiltViewModel<HomeViewModel>()
 
             EffectiveMobileTheme {
 
