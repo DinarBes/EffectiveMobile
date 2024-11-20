@@ -28,7 +28,7 @@ data class Courses(
     val totalUnits: Int,
     @SerialName("lessons_count")
     val lessonsCount: Int,
-    val price: Int? = null,
+    val price: String? = null,
     val title: String,
     @SerialName("create_date")
     val createDate: String

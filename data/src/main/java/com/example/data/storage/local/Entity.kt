@@ -12,7 +12,7 @@ data class CourseEntity(
     val description: String,
     val totalUnits: Int,
     val lessonsCount: Int,
-    val price: Int? = null,
+    val price: String? = null,
     val title: String,
     val createDate: String,
     val page: Int
@@ -24,7 +24,7 @@ data class BookmarkEntity(
     val summary: String,
     val cover: String,
     val description: String,
-    val price: Int? = null,
+    val price: String? = null,
     val title: String,
     val createDate: String
 )

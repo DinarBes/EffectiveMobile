@@ -30,9 +30,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.util.toRange
 import coil.compose.AsyncImage
 import com.example.data.storage.mappers.toBookmarkEntity
-import com.example.data.storage.mappers.toCourseEntity
 import com.example.domain.models.Course
 import com.example.effectivemobile.R
 import com.example.effectivemobile.presentation.extension.dateToString
@@ -42,6 +42,8 @@ import com.example.effectivemobile.ui.theme.DarkGrey
 import com.example.effectivemobile.ui.theme.Green
 import com.example.effectivemobile.ui.theme.LightGrey
 import com.example.effectivemobile.ui.theme.Roboto
+import kotlin.math.roundToInt
+import kotlin.random.Random
 
 @Composable
 fun CourseItem(
@@ -93,7 +95,9 @@ fun TopSelection(
         AsyncImage(
             model = course.cover,
             contentDescription = null,
-            modifier = Modifier.fillMaxWidth().height(120.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(120.dp),
             contentScale = ContentScale.FillWidth
         )
         Row(
@@ -132,19 +136,45 @@ fun TopSelection(
         Box(
             modifier = Modifier
                 .padding(10.dp)
-                .clip(CircleShape)
-                .background(color = DarkGrey.copy(0.5f))
                 .align(Alignment.BottomStart)
         ) {
-            Text(
-                text = course.createDate.dateToString("yyyy-MM-dd'T'HH:mm:ss", "dd MMMM yyyy"),
-                fontFamily = Roboto,
-                fontSize = 12.sp,
-                fontWeight = FontWeight.W400,
-                color = LightGrey,
-                modifier = Modifier
-                    .padding(5.dp)
-            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                Row(
+                    modifier = Modifier
+                        .clip(CircleShape)
+                        .background(color = DarkGrey.copy(0.5f))
+                        .padding(5.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(5.dp)
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.star),
+                        contentDescription = null,
+                        tint = Green
+                    )
+                    Text(
+                        text = course.rating.toString(),
+                        fontFamily = Roboto,
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.W400,
+                        color = LightGrey
+                    )
+                }
+                Text(
+                    text = course.createDate.dateToString("yyyy-MM-dd'T'HH:mm:ss", "dd MMMM yyyy"),
+                    fontFamily = Roboto,
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.W400,
+                    color = LightGrey,
+                    modifier = Modifier
+                        .padding(5.dp)
+                        .clip(CircleShape)
+                        .background(color = DarkGrey.copy(0.5f))
+                )
+            }
         }
     }
 }
@@ -153,7 +183,7 @@ fun TopSelection(
 fun BottomSelection(
     title: String,
     summary: String,
-    price: Int?,
+    price: String?,
     action: () -> Unit
 ) {
 

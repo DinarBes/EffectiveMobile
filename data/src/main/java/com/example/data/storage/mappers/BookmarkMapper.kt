@@ -1,7 +1,6 @@
 package com.example.data.storage.mappers
 
 import com.example.data.storage.local.BookmarkEntity
-import com.example.domain.models.Bookmark
 import com.example.domain.models.Course
 
 fun Course.toBookmarkEntity(): BookmarkEntity {
