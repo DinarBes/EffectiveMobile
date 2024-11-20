@@ -27,14 +27,14 @@ class CourseMediator(
         return try {
             // текущий ключ загрузки
             val loadKey = when (loadType) {
-                LoadType.REFRESH -> 1
+                LoadType.REFRESH -> 5
                 LoadType.PREPEND -> return MediatorResult.Success(
                     endOfPaginationReached = true
                 )
                 LoadType.APPEND -> {
                     val lastItem = state.lastItemOrNull()
                     if (lastItem == null) {
-                        1
+                        5
                     }
                     else {
                         (lastItem.key / state.config.pageSize) + 3

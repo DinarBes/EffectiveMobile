@@ -5,10 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.data.storage.local.BookmarkEntity
 import com.example.data.storage.local.CourseDatabase
-import com.example.data.storage.local.CourseEntity
-import com.example.data.storage.mappers.toCourse
-import com.example.domain.models.Bookmark
-import com.example.domain.models.Course
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

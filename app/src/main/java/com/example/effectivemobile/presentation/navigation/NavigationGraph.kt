@@ -45,7 +45,8 @@ fun NavigationGraph(
         composable(route = Screen.HomeScreen.route) {
             HomeView(
                 homeViewModel = homeViewModel,
-                bookmarksViewModel = bookmarksViewModel
+                bookmarksViewModel = bookmarksViewModel,
+                searchViewModel = searchViewModel
             )
         }
 
