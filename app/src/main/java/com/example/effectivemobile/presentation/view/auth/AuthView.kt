@@ -1,6 +1,7 @@
 package com.example.effectivemobile.presentation.view.auth
 
 import android.util.Log
+import android.util.Patterns
 import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -18,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -36,8 +38,6 @@ import com.example.effectivemobile.ui.theme.Green
 import com.example.effectivemobile.ui.theme.Grey
 import com.example.effectivemobile.ui.theme.LightGrey
 import com.example.effectivemobile.ui.theme.Roboto
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
@@ -47,6 +47,7 @@ fun AuthView(
 ) {
 
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
     val enabled = remember { mutableStateOf(true) }
@@ -65,7 +66,9 @@ fun AuthView(
             fontSize = 28.sp,
             fontWeight = FontWeight.W400,
             color = LightGrey,
-            modifier = Modifier.fillMaxWidth().align(Alignment.Start)
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.Start)
         )
         AuthInfo(
             email = email,
@@ -83,15 +86,29 @@ fun AuthView(
                     enabled.value = false
                     Toast.makeText(context, "Заполните все поля", Toast.LENGTH_SHORT).show()
                     enabled.value = true
+                } else if (!Patterns.EMAIL_ADDRESS.matcher(email.value).matches()) {
+                    enabled.value = false
+                    Toast.makeText(context, "Неккоректный email адрес", Toast.LENGTH_SHORT).show()
+                    enabled.value = true
+                } else if (password.value.length < 6) {
+                    enabled.value = false
+                    Toast.makeText(context, "Пароль должен содержать не менее 6 символов", Toast.LENGTH_SHORT).show()
+                    enabled.value = true
                 } else {
                     enabled.value = true
-                    CoroutineScope(Dispatchers.IO).launch {
+                    scope.launch {
                         authViewModel.authState.collect { authState ->
                             when (authState) {
-                                is AuthState.Success -> authViewModel.authUser(
-                                    login = email.value,
-                                    password = password.value
-                                )
+                                is AuthState.Success -> {
+//                                    authViewModel.authUser(
+//                                        login = email.value,
+//                                        password = password.value
+//                                    )
+//                                    Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
+                                    navController.navigate(route = Screen.HomeScreen.route) {
+                                        popUpTo(Screen.AuthScreen.route)
+                                    }
+                                }
                                 is AuthState.Error -> {
                                     Log.e("Error", authState.message ?: "Unknown error")
                                     Toast.makeText(context, authState.message ?: "Unknown error", Toast.LENGTH_SHORT).show()

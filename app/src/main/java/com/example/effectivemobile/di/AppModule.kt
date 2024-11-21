@@ -10,16 +10,16 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
-//@Module
-//@InstallIn(SingletonComponent::class)
-//object AppModule {
-//
-//    @Provides
-//    @Singleton
-//    fun FirebaseAuth(): FirebaseAuth {
-//        return FirebaseAuth.getInstance()
-//    }
-//
+@Module
+@InstallIn(SingletonComponent::class)
+object AppModule {
+
+    @Provides
+    @Singleton
+    fun FirebaseAuth(): FirebaseAuth {
+        return FirebaseAuth.getInstance()
+    }
+
 //    @Provides
 //    @Singleton
 //    fun FirebaseApp(
@@ -28,4 +28,4 @@ import javax.inject.Singleton
 //        return FirebaseApp.initializeApp(context) ?:
 //        throw IllegalStateException("FirebaseApp initialization failed")
 //    }
-//}
+}

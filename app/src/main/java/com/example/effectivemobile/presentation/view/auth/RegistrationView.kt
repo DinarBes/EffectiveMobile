@@ -1,6 +1,7 @@
 package com.example.effectivemobile.presentation.view.auth
 
 import android.util.Log
+import android.util.Patterns
 import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -43,8 +44,6 @@ import com.example.effectivemobile.ui.theme.Grey
 import com.example.effectivemobile.ui.theme.LightGrey
 import com.example.effectivemobile.ui.theme.Orange
 import com.example.effectivemobile.ui.theme.Roboto
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
@@ -96,20 +95,27 @@ fun RegistrationView(
                     enabled.value = false
                     Toast.makeText(context, "Заполните все поля", Toast.LENGTH_SHORT).show()
                     enabled.value = true
+                } else if (!Patterns.EMAIL_ADDRESS.matcher(email.value).matches()) {
+                    enabled.value = false
+                    Toast.makeText(context, "Неккоректный email адрес", Toast.LENGTH_SHORT).show()
+                    enabled.value = true
                 } else if (password.value != confirmPassword.value) {
                     enabled.value = false
                     Toast.makeText(context, "Пароли не совпадают", Toast.LENGTH_SHORT).show()
                     enabled.value = true
+                } else if (password.value.length < 6) {
+                    enabled.value = false
+                    Toast.makeText(context, "Пароль должен содержать не менее 6 символов", Toast.LENGTH_SHORT).show()
+                    enabled.value = true
                 } else {
-                    Log.e("Reg View", "Что то проихойди пжпп")
                     scope.launch {
                         authViewModel.authState.collect { authState ->
                             when (authState) {
                                 is AuthState.Success -> {
-                                    authViewModel.registrationUser(
-                                        login = email.value,
-                                        password = password.value
-                                    )
+//                                    authViewModel.registrationUser(
+//                                        login = email.value,
+//                                        password = password.value
+//                                    )
                                     navController.navigate(route = Screen.AuthScreen.route)
                                     Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
                                 }

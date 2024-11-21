@@ -4,13 +4,10 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.data.storage.model.AuthState
-import com.example.data.storage.network.FirebaseNetwork
 import com.example.domain.usecase.AuthorizationUseCase
 import com.example.domain.usecase.SubscribeToTopicUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -40,7 +37,6 @@ class AuthViewModel @Inject constructor(
                 authorizationUseCase.registrationUser(login, password)
                 _authState.emit(AuthState.Success)
             } catch (error: Exception) {
-                Log.e("Reg user vm error", error.toString())
                 _authState.emit(AuthState.Error(error.message))
             }
         }

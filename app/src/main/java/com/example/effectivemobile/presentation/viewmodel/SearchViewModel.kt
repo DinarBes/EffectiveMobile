@@ -26,7 +26,7 @@ class SearchViewModel @Inject constructor(
     val searchText = _searchText.asStateFlow()
 
     private val _courses = MutableStateFlow<List<CourseInfo>>(listOf())
-    val courses = _courses.asStateFlow()
+    private val courses = _courses.asStateFlow()
 
     private val _course = MutableStateFlow<Course?>(null)
     val course = _course.asStateFlow()

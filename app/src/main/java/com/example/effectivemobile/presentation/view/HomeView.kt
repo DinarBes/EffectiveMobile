@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ModalBottomSheetLayout
@@ -41,11 +40,7 @@ import com.example.effectivemobile.presentation.viewmodel.HomeViewModel
 import com.example.effectivemobile.presentation.viewmodel.SearchViewModel
 import com.example.effectivemobile.presentation.viewmodel.SortedState
 import com.example.effectivemobile.ui.theme.Background
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import okhttp3.internal.wait
 
 @Composable
 fun HomeView(

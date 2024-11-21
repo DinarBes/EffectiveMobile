@@ -30,7 +30,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.util.toRange
 import coil.compose.AsyncImage
 import com.example.data.storage.mappers.toBookmarkEntity
 import com.example.domain.models.Course
@@ -42,8 +41,6 @@ import com.example.effectivemobile.ui.theme.DarkGrey
 import com.example.effectivemobile.ui.theme.Green
 import com.example.effectivemobile.ui.theme.LightGrey
 import com.example.effectivemobile.ui.theme.Roboto
-import kotlin.math.roundToInt
-import kotlin.random.Random
 
 @Composable
 fun CourseItem(

@@ -25,7 +25,7 @@ fun NavigationGraph(
 
     NavHost(
         navController = navHostController,
-        startDestination = Screen.HomeScreen.route
+        startDestination = Screen.RegistrationScreen.route
     ) {
 
         composable(route = Screen.RegistrationScreen.route) {
